@@ -9,6 +9,6 @@ public interface UserService {
 	@SuppressWarnings("rawtypes")
 	public Map UserLogin(Map user);
 
-	public Map createUser(User user);
+	public Map createUser(Map user);
 	
 }

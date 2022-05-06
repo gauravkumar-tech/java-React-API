@@ -6,30 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gaurav.courses.Model.User;
-import com.gaurav.courses.service.UserService;
+import com.gaurav.courses.service.CoursesService;
 
 @RestController
-@RequestMapping("/User")
+@RequestMapping("/courses")
 @CrossOrigin(origins = "*")
-public class UserController {
-	
+public class CoursesController {
+
 	@Autowired
-	private UserService userService;
+	private CoursesService courseService;
 	
 	@SuppressWarnings({ "static-access", "rawtypes" })
-	@PostMapping("/login")
-	public ResponseEntity<Map> userLogin(@RequestBody Map user){
+	@PostMapping("/allCourses")
+	public ResponseEntity<Map> getAllCourse(){
 		ResponseEntity res =null;
 		try {
-			Map newMap=(Map)user.get("data");
-			return res.ok(this.userService.UserLogin(newMap));			
+			return res.status(HttpStatus.CREATED).body(this.courseService.getAllCourses());
 		} catch (Exception e) {
 			e.printStackTrace();
 			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -37,15 +34,16 @@ public class UserController {
 	}
 	
 	@SuppressWarnings({ "static-access", "rawtypes" })
-	@PostMapping("/create")
-	public ResponseEntity<Map> createUser(@RequestBody Map user){
+	@PostMapping("/Create")
+	public ResponseEntity<Map> createCourse(@RequestBody Map jsonMap){
 		ResponseEntity res =null;
 		try {
-			return res.status(HttpStatus.CREATED).body(this.userService.createUser(user));
+			return res.status(HttpStatus.CREATED).body(this.courseService.createCourse(jsonMap));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
+	
 }

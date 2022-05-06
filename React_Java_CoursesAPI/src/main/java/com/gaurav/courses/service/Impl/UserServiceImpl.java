@@ -38,13 +38,17 @@ public class UserServiceImpl implements UserService{
 //	user creation api
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Map createUser(User user) {
+	public Map createUser(Map user) {
 		Map map = new HashMap();
 		try {
-			User userDTO = userRepo.findByUserName(user.getUserName());
+			Map userMAp=(Map) user.get("data");
+			User userDTO = userRepo.findByUserName(userMAp.get("userName").toString());
 			if(userDTO==null) {
-				userRepo.save(user);
-				map.put("user", user);
+				User user2 = new User();
+				user2.setPassword(userMAp.get("password").toString());
+				user2.setUserName(userMAp.get("userName").toString());
+				userRepo.save(user2);
+				map.put("user", user2);
 				map.put("UserSaved",true);	
 			}else
 				throw new Exception("user Already Present");
