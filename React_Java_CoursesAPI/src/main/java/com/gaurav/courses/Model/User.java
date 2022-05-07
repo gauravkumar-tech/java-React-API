@@ -30,6 +30,7 @@ public class User implements Serializable{
 	private int id;
 	private String userName;
 	private String password;
+	private String userType="Normal User";
 	
 	
 }

@@ -25,12 +25,44 @@ public class UserServiceImpl implements UserService{
 			User userDTO = userRepo.findByUserName(user.get("userName").toString());
 			if(userDTO!=null) {
 				map.put("user", userDTO);
-				map.put("UserPresent",true);	
+				
+				
+				if(userDTO.getPassword().equals(user.get("password").toString())) {
+					map.put("UserPresent",true);	
+					map.put("message","Welcome : "+ userDTO.getUserName());
+				}else {
+					map.put("UserPresent",false);	
+					map.put("message","Your Password Does not Matches!!");
+				}
+				
 			}else
 				throw new Exception("user Not Present");
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("UserPresent", false);
+			map.put("message","login Failed");
+		}
+		return map;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Map changeUserPassword(Map user) {
+		Map map =new HashMap();
+		try {
+			Map userMAp=(Map) user.get("data");
+			User userDTO = userRepo.findById(Integer.parseInt((userMAp.get("id").toString()))).orElse(null);
+			if(userDTO!=null) {
+				userDTO.setPassword(userMAp.get("password").toString());
+				userRepo.save(userDTO);
+				map.put("user", userDTO);
+				map.put("UserPresent",true);	
+				map.put("message","Password Changed SuccesFully!! New Password : "+userMAp.get("password").toString());
+			}else
+				throw new Exception("user Not Present");
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("UserPresent", false);
+			map.put("message","login Failed");
 		}
 		return map;
 	}
@@ -50,11 +82,13 @@ public class UserServiceImpl implements UserService{
 				userRepo.save(user2);
 				map.put("user", user2);
 				map.put("UserSaved",true);	
+				map.put("message","User Successfully added with Name : "+ userMAp.get("userName").toString());
 			}else
 				throw new Exception("user Already Present");
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("UserSaved", false);
+			map.put("message","Invalid Request!! User Already Present!! ");
 		}
 		return map;
 	}

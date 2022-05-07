@@ -11,4 +11,6 @@ public interface UserService {
 
 	public Map createUser(Map user);
 	
+	public Map changeUserPassword(Map user);
+	
 }

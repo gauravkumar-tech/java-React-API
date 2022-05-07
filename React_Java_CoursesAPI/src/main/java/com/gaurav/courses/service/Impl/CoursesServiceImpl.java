@@ -42,14 +42,17 @@ public class CoursesServiceImpl implements CoursesService{
 				Courses course = new Courses();
 				course.setCourseName(courseMap.get("courseName").toString());
 				course.setCourseDescription(courseMap.get("courseDescription").toString());
+				course.setUserID(Integer.parseInt(courseMap.get("userId").toString()));
 				courseRepo.save(course);
 				map.put("Course", course);
-				map.put("courseAdded",true);	
+				map.put("courseAdded",true);
+				map.put("message","Course Successfully added with Name : "+ course.getCourseName());
 			}else
 				throw new Exception("Course Already Present");
 		} catch (Exception e) {
 			e.printStackTrace();
 			map.put("courseAdded", false);
+			map.put("message","Invalid Request!! Course Already Present!! ");
 		}
 		return map;
 	}

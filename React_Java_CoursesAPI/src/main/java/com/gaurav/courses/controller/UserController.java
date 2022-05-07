@@ -47,5 +47,16 @@ public class UserController {
 			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
+	@SuppressWarnings({ "static-access", "rawtypes" })
+	@PostMapping("/changePassword")
+	public ResponseEntity<Map> changeUserPassword(@RequestBody Map user){
+		ResponseEntity res =null;
+		try {
+			return res.status(HttpStatus.CREATED).body(this.userService.changeUserPassword(user));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 
 }
