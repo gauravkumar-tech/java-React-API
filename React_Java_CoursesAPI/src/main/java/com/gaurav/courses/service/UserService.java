@@ -8,6 +8,9 @@ public interface UserService {
 
 	@SuppressWarnings("rawtypes")
 	public Map UserLogin(Map user);
+	public Map getAllUsers();
+
+	public Map deleteUser(int id);
 
 	public Map createUser(Map user);
 	

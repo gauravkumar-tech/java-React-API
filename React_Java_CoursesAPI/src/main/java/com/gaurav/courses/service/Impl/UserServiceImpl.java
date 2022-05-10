@@ -1,11 +1,16 @@
 package com.gaurav.courses.service.Impl;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.omg.CORBA.MARSHAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gaurav.courses.Model.User;
 import com.gaurav.courses.repository.UserRepository;
 import com.gaurav.courses.service.UserService;
@@ -91,6 +96,52 @@ public class UserServiceImpl implements UserService{
 			map.put("message","Invalid Request!! User Already Present!! ");
 		}
 		return map;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public Map getAllUsers() {
+		Map map =new HashMap();
+		map.put("heading", null);
+		map.put("data",null);
+		try {
+			List<User> users =(List<User>)userRepo.findAll();
+			if(users!=null) {
+				
+				User user = users.get(0);
+				ObjectMapper onjMapper = new ObjectMapper();
+				HashMap convertValue = onjMapper.convertValue(user, HashMap.class);
+				Set<String> keySet = convertValue.keySet();
+				
+				List headingList = new LinkedList();
+				for (String object : keySet) {
+					Map headingsMap = new HashMap();
+					headingsMap.put("Heading", object);
+					headingsMap.put("align", "right");
+					headingList.add(headingsMap);
+				}				
+				map.put("heading", headingList);
+				map.put("data",users);
+			}else
+				throw new Exception("No user Present");
+		} catch (Exception e) {
+			e.printStackTrace();
+			map.put("UsersPresent", false);
+			map.put("message","Make a User");
+		}
+		return map;
+	}
+
+	@Override
+	public Map deleteUser(int id) {
+		
+		try {
+			userRepo.deleteById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 	

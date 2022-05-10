@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gaurav.courses.Model.User;
@@ -30,6 +32,30 @@ public class UserController {
 		try {
 			Map newMap=(Map)user.get("data");
 			return res.ok(this.userService.UserLogin(newMap));			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@SuppressWarnings({ "static-access", "rawtypes" })
+	@PostMapping("/getAllUsers")
+	public ResponseEntity<Map> getAllUsers(){
+		ResponseEntity res =null;
+		try {
+			return res.ok(this.userService.getAllUsers());			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@SuppressWarnings({ "static-access", "rawtypes" })
+	@PostMapping("/deleteUser")
+	public ResponseEntity<Map> deleteUser(@RequestBody Map map){
+		ResponseEntity res =null;
+		try {
+			return res.ok(this.userService.deleteUser(Integer.parseInt(((Map)map.get("data")).get("id").toString())));			
 		} catch (Exception e) {
 			e.printStackTrace();
 			return res.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
